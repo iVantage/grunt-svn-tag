@@ -31,10 +31,10 @@ module.exports = function(grunt) {
       , command = 'svn cp "^/trunk" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
 
     if(shell.exec(command) > 0) {
-      return grunt.fail.fatal('Encountered an error while trying to svn tag your working copy');
+      return grunt.fail.fatal('Encountered an error while trying to svn tag trunk');
     }
 
-    grunt.log.ok('Working copy tagged as version ' + projectVersion);
+    grunt.log.ok('Trunk tagged as version ' + projectVersion);
   });
 
 };
