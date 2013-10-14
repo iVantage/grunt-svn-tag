@@ -1,0 +1,42 @@
+{
+  "name": "grunt-svn-tag",
+  "description": "The best Grunt plugin ever.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/iVantage/grunt-svn-tag",
+  "author": {
+    "name": "Justin",
+    "email": "jus.russell@gmail.com",
+    "url": "jrussell.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iVantage/grunt-svn-tag.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iVantage/grunt-svn-tag/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/iVantage/grunt-svn-tag/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt": "~0.4.0rc7"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "shelljs": "~0.2.6",
+    "findup-sync": "~0.1.2"
+  }
+}
