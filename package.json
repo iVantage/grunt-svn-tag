@@ -1,7 +1,7 @@
 {
   "name": "grunt-svn-tag",
-  "description": "The best Grunt plugin ever.",
-  "version": "0.1.0",
+  "description": "Automate tagging svn working copies.",
+  "version": "0.1.1",
   "homepage": "https://github.com/iVantage/grunt-svn-tag",
   "author": {
     "name": "Justin",

@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     var commitMessage = 'admin: Tag for release (' + projectVersion + ')'
       , command = 'svn cp "^/trunk" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
 
-    if(shell(command) > 0) {
+    if(shell.exec(command) > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag your working copy');
     }
 
