@@ -21,12 +21,15 @@ grunt.loadNpmTasks('grunt-svn-tag');
 
 ### Overview
 This taks is not super flexible at the moment. It will always tag your current
-working copy with the version listed in your project's `package.json` file using
-the commit message:
+working copy path with the version listed in your project's `package.json` file
+using the commit message:
 
 ```
 admin: Tag for release (_version_)
 ```
+
+The task must be run from your project's root folder and it must either be the
+svn trunk or brunch (e.g. you cannot tag a tag or anything like that).
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
