@@ -2,7 +2,7 @@
  * grunt-svn-tag
  * https://github.com/iVantage/grunt-svn-tag
  *
- * Copyright (c) 2013 Justin
+ * Copyright (c) 2013 jtrussell
  * Licensed under the MIT license.
  */
 
@@ -13,10 +13,25 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  var shell = require('shelljs')
+  var sh = require('shelljs')
+    , info = require('svn-info')
     , findup = require('findup-sync');
 
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
+
+    if(!sh.test('-d', '.svn')) {
+      grunt.fail.fatal('Task "svn_tag" must be run from an svn project root');
+    }
+
+    // Make sure we're on trunk or a branch
+    var info = info.sync()
+      , urlParts = info.url.split('/')
+      , isTrunk = urlParts.pop() === 'trunk'
+      , isBranch = urlParts.pop() === 'branches';
+
+    if(!isTrunk && !isBranch) {
+      grunt.fail.fatal('Task "svn_tag" must be run from trunk or a branch');
+    }
 
     var packageJsonLoc = findup('package.json', {cwd: process.cwd()});
     
@@ -28,13 +43,13 @@ module.exports = function(grunt) {
       , projectVersion = 'v' + packageJson.version;
 
     var commitMessage = 'admin: Tag for release (' + projectVersion + ')'
-      , command = 'svn cp "^/trunk" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
+      , command = 'svn cp "' + info.url + '" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
 
-    if(shell.exec(command) > 0) {
-      return grunt.fail.fatal('Encountered an error while trying to svn tag trunk');
+    if(sh.exec(command, {silent: true}) > 0) {
+      return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
     }
 
-    grunt.log.ok('Trunk tagged as version ' + projectVersion);
+    grunt.log.ok('Tagged as version ' + projectVersion);
   });
 
 };
