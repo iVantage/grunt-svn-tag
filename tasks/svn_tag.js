@@ -15,7 +15,8 @@ module.exports = function(grunt) {
 
   var sh = require('shelljs')
     , info = require('svn-info')
-    , findup = require('findup-sync');
+    , findup = require('findup-sync')
+    , run;
 
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
 
@@ -45,11 +46,22 @@ module.exports = function(grunt) {
     var commitMessage = 'admin: Tag for release (' + projectVersion + ')'
       , command = 'svn cp "' + info.url + '" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
 
-    if(sh.exec(command, {silent: true}) > 0) {
+    if(run(command).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
     }
 
     grunt.log.ok('Tagged as version ' + projectVersion);
   });
+
+  run = function(cmd) {
+    if(grunt.option('dry-run')) {
+      console.log('Not running: ' + cmd);
+      return {
+        code: 0,
+        output: ''
+      };
+    }
+    return sh.exec(cmd, {silent: true});
+  };
 
 };
