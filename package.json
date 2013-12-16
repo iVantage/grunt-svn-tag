@@ -1,7 +1,7 @@
 {
   "name": "grunt-svn-tag",
   "description": "Automate tagging svn working copies.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/iVantage/grunt-svn-tag",
   "author": {
     "name": "jtrussell",
@@ -38,6 +38,6 @@
   "dependencies": {
     "shelljs": "~0.2.6",
     "findup-sync": "~0.1.2",
-    "svn-info": "~0.1.1"
+    "svn-info": "~0.1.2"
   }
 }
