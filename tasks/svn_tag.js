@@ -14,7 +14,6 @@ module.exports = function(grunt) {
   // creation: http://gruntjs.com/creating-tasks
 
   var sh = require('shelljs')
-    , info = require('svn-info')
     , findup = require('findup-sync')
     , run;
 
@@ -25,7 +24,7 @@ module.exports = function(grunt) {
     }
 
     // Make sure we're on trunk or a branch
-    var info = info.sync()
+    var info = require('svn-info').sync()
       , urlParts = info.url.split('/')
       , isTrunk = urlParts.pop() === 'trunk'
       , isBranch = urlParts.pop() === 'branches';
