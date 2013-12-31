@@ -20,6 +20,13 @@ module.exports = function(grunt) {
       options: {
         jshintrc: '.jshintrc',
       },
+    },
+    svn_tag: {
+        test: {
+            options: {
+                'dry-run': true,
+            },
+        },
     }
   });
 
@@ -30,6 +37,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['jshint', 'svn_tag']);
 
 };

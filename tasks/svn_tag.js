@@ -19,31 +19,26 @@ module.exports = function(grunt) {
 
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
 
-    if(!sh.test('-d', '.svn')) {
-      grunt.fail.fatal('Task "svn_tag" must be run from an svn project root');
-    }
+    var info;
 
-    // Make sure we're on trunk or a branch
-    var info = require('svn-info').sync()
-      , urlParts = info.url.split('/')
-      , isTrunk = urlParts.pop() === 'trunk'
-      , isBranch = urlParts.pop() === 'branches';
-
-    if(!isTrunk && !isBranch) {
-      grunt.fail.fatal('Task "svn_tag" must be run from trunk or a branch');
+    try {
+      info = require('svn-info').sync();
+    } catch(e) {
+      grunt.fail.fatal(e);
     }
 
     var packageJsonLoc = findup('package.json', {cwd: process.cwd()});
-    
+
     if(!packageJsonLoc) {
       return grunt.fail.fatal(this.name + ' could not find your package.json file.');
     }
 
     var packageJson =  grunt.file.readJSON(packageJsonLoc)
-      , projectVersion = 'v' + packageJson.version;
-
-    var commitMessage = 'admin: Tag for release (' + projectVersion + ')'
-      , command = 'svn cp "' + info.url + '" "^/tags/' + projectVersion + '" -m "' + commitMessage + '"';
+      , projectVersion = 'v' + packageJson.version
+      , fromURL = info.url
+      , toURL = info.repositoryRoot + '/tags/' + projectVersion
+      , commitMessage = 'admin: Tag for release (' + projectVersion + ')'
+      , command = 'svn cp "' + fromURL + '" "' + toURL + '" -m "' + commitMessage + '"';
 
     if(run(command).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
@@ -54,7 +49,7 @@ module.exports = function(grunt) {
 
   run = function(cmd) {
     if(grunt.option('dry-run')) {
-      console.log('Not running: ' + cmd);
+      grunt.log.writeln('Not running: ' + cmd);
       return {
         code: 0,
         output: ''
