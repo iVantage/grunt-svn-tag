@@ -20,8 +20,9 @@ module.exports = function(grunt) {
 
     var info,
         options = this.options({
-          'commitMessage': 'admin: Tag for release ({%= version %})',
-          'dry-run': false
+          'commitMessage': 'admin: Tag for release ({%= version %})'
+          , 'tag': 'v{%= version %}'
+          , 'dry-run': false
         });
 
     try {
@@ -37,9 +38,12 @@ module.exports = function(grunt) {
     }
 
     var packageJson =  grunt.file.readJSON(packageJsonLoc)
-      , projectVersion = 'v' + packageJson.version
+      , projectVersion = packageJson.version
       , fromURL = info.url
-      , toURL = info.repositoryRoot + '/tags/' + projectVersion
+      , tagName = processTemplate(options.tag, {
+            version: projectVersion
+        })
+      , toURL = info.repositoryRoot + '/tags/' + tagName
       , commitMessage = processTemplate(options.commitMessage, {
           version: projectVersion
         })
