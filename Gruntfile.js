@@ -22,11 +22,10 @@ module.exports = function(grunt) {
       },
     },
     svn_tag: {
-        test: {
-            options: {
-                'dry-run': true,
-            },
-        },
+      options: {
+        'dry-run': true,
+        'commitMessage': 'Tag project-{%= version %}'
+      }
     }
   });
 
@@ -37,6 +36,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'svn_tag']);
+  grunt.registerTask('default', ['jshint', 'svn_tag:test']);
 
 };
