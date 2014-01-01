@@ -22,8 +22,12 @@ module.exports = function(grunt) {
         options = this.options({
           'commitMessage': 'admin: Tag for release ({%= version %})'
           , 'tag': 'v{%= version %}'
-          , 'dry-run': false
+          , 'dryRun': false
         });
+
+    options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
+    options.tag = grunt.option('tag') ? grunt.option('tag') : options.tag;
+    options.dryRun = grunt.option('dry-run') ? grunt.option('dry-run') : options.dryRun;
 
     try {
       info = require('svn-info').sync();
@@ -49,7 +53,7 @@ module.exports = function(grunt) {
         })
       , command = 'svn cp "' + fromURL + '" "' + toURL + '" -m "' + commitMessage + '"';
 
-    if(run(command, options['dry-run']).code > 0) {
+    if(run(command, options['dryRun']).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
     }
 

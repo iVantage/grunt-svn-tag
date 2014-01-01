@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     },
     svn_tag: {
       options: {
-        'dry-run': true,
+        'dryRun': true,
         'commitMessage': 'Tag project-v{%= version %}',
         'tag': 'project-v{%= version %}'
       }
