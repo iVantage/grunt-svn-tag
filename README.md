@@ -20,19 +20,54 @@ grunt.loadNpmTasks('grunt-svn-tag');
 ## The "svn_tag" task
 
 ### Overview
-This taks is not super flexible at the moment. It will always tag your current
-working copy path with the version listed in your project's `package.json` file
-using the commit message:
+The `svn\_tag` task creates a new subversion tag for your working copy path
+using the version listed in your project's `package.json` file.
 
-```
-admin: Tag for release (_version_)
+## The `svn_tag` task
+In your project's Gruntfile, add a section named `svn_tag` to the data object
+passed into `grunt.initConfig()`.
+
+```javascript
+grunt.initConfig({
+  svn_tag: {
+    options: {
+      tag: 'v{%= version %}',
+      commitMessage: 'admin: Tag for release ({%= version %})'
+    }
+  }
+});
 ```
 
-The task must be run from your project's root folder and it must either be the
-svn trunk or brunch (e.g. you cannot tag a tag or anything like that).
+### Options
+
+#### tag
+Type: `String`
+Default: 'v{%= version %}'
+
+The name used to create your svn tag where `version` is the version specified
+in your project's `package.json` file. Processed as a grunt template using
+`'{%'` and `'%}'` as template delimiters. You may also use the `--tag` flag
+from the command line.
+
+#### commitMessage
+Type: `String`
+Default: `'admin: Tag for release ({%= version %})'`
+
+The commit message used when creating your svn tag where `version` is the
+version specified in your project's `package.json` file. Processed as a grunt
+template using `'{%'` and `'%}'` as template delimiters. You may also use the
+`--commit-message` flag from the command line.
+
+#### dryRun
+Type: `Boolean`
+Default: `false`
+
+Mostly included for debugging purposes. When set to true svn commands while be
+written to the console rather than executed.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+
+- 01-01-2014 v0.3.0 Make tag name and commit message configurable.
