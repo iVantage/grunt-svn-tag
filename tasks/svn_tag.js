@@ -16,13 +16,33 @@ module.exports = function(grunt) {
   var sh = require('shelljs')
     , findup = require('findup-sync');
 
+  grunt.template.addDelimiters('svn_tag', '{%', '%}');
+
+  var processTemplate = function (message, data) {
+    return grunt.template.process(message, {
+      delimiters: 'svn_tag',
+      data: data
+    });
+  };
+
+  var run = function(cmd, dryRun) {
+    if(dryRun) {
+      grunt.log.writeln('Not running: ' + cmd);
+      return {
+        code: 0,
+        output: ''
+      };
+    }
+    return sh.exec(cmd, {silent: true});
+  };
+
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
 
     var info,
         options = this.options({
-          'commitMessage': 'admin: Tag for release ({%= version %})'
-          , 'tag': 'v{%= version %}'
-          , 'dryRun': false
+          'commitMessage': 'admin: Tag for release ({%= version %})',
+          'tag': 'v{%= version %}',
+          'dryRun': false
         });
 
     options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
@@ -59,24 +79,5 @@ module.exports = function(grunt) {
 
     grunt.log.ok('Tagged as version ' + projectVersion);
   });
-
-  grunt.template.addDelimiters('svn_tag', '{%', '%}');
-  function processTemplate(message, data) {
-    return grunt.template.process(message, {
-      delimiters: 'svn_tag',
-      data: data
-    });
-  }
-
-  function run(cmd, dryRun) {
-    if(dryRun) {
-      grunt.log.writeln('Not running: ' + cmd);
-      return {
-        code: 0,
-        output: ''
-      };
-    }
-    return sh.exec(cmd, {silent: true});
-  }
 
 };
