@@ -42,7 +42,8 @@ module.exports = function(grunt) {
         options = this.options({
           'commitMessage': 'admin: Tag for release ({%= version %})',
           'tag': 'v{%= version %}',
-          'dryRun': false
+          'dryRun': false,
+          'projectRoot': null
         });
 
     options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
@@ -61,13 +62,19 @@ module.exports = function(grunt) {
       return grunt.fail.fatal(this.name + ' could not find your package.json file.');
     }
 
+    var projectRoot = info.repositoryRoot;
+    if(grunt.option('projectRoot') || options.projectRoot) {
+      projectRoot = grunt.option('projectRoot') ? grunt.option('projectRoot') : options.projectRoot;
+      projectRoot = projectRoot.replace('/\/$/', '');
+    }
+
     var packageJson =  grunt.file.readJSON(packageJsonLoc)
       , projectVersion = packageJson.version
       , fromURL = info.url
       , tagName = processTemplate(options.tag, {
             version: projectVersion
         })
-      , toURL = info.repositoryRoot + '/tags/' + tagName
+      , toURL = projectRoot + '/tags/' + tagName
       , commitMessage = processTemplate(options.commitMessage, {
           version: projectVersion
         })
