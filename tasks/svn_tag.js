@@ -36,6 +36,22 @@ module.exports = function(grunt) {
     return sh.exec(cmd, {silent: true});
   };
 
+  var getRepositoryRoot = function(url) {
+    var roots = ['trunk', 'branches'];
+    url = url.trim().replace(/\/$/, '');
+
+    var result = null;
+    roots.forEach(function(root) {
+        var i = url.lastIndexOf(root);
+        if (i !== -1) {
+            result = url.substring(0, i);
+            return false;
+        }
+    });
+
+    return result;
+  };
+
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
 
     var info,
@@ -62,14 +78,20 @@ module.exports = function(grunt) {
       return grunt.fail.fatal(this.name + ' could not find your package.json file.');
     }
 
+    var packageJson =  grunt.file.readJSON(packageJsonLoc);
     var projectRoot = info.repositoryRoot;
+
     if(grunt.option('projectRoot') || options.projectRoot) {
       projectRoot = grunt.option('projectRoot') ? grunt.option('projectRoot') : options.projectRoot;
-      projectRoot = projectRoot.replace('/\/$/', '');
     }
 
-    var packageJson =  grunt.file.readJSON(packageJsonLoc)
-      , projectVersion = packageJson.version
+    if (packageJson.repository && packageJson.repository.type === 'svn') {
+      projectRoot = getRepositoryRoot(packageJson.repository.url);
+    }
+
+    projectRoot = projectRoot.replace(/\/$/, '');
+
+    var projectVersion = packageJson.version
       , fromURL = info.url
       , tagName = processTemplate(options.tag, {
             version: projectVersion
