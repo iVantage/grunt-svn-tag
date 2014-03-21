@@ -27,6 +27,14 @@ module.exports = function(grunt) {
         'commitMessage': 'Tag project-v{%= version %}',
         'tag': 'project-v{%= version %}'
       }
+    },
+    bump: {
+      options: {
+        commitMessage: 'chore: Bump for release (v%VERSION%)',
+        files: ['package.json'],
+        commitFiles: ['package.json'],
+        push: false
+      }
     }
   });
 
@@ -35,6 +43,7 @@ module.exports = function(grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-bump');
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'svn_tag:test']);
