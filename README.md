@@ -65,16 +65,19 @@ template using `'{%'` and `'%}'` as template delimiters. You may also use the
 
 #### projectRoot
 Type: `String`
-Default: ***inferred from `svn info` url***
+Default: ***inferred from `svn info` url && package.json***
 
-Used to determine the base project url where new tags should be created. Useful
-if you have multiple projects in a single svn repository.
+Used to set the base project url where new tags should be created. Useful if you
+have multiple projects in a single svn repository.
 
 Tags will be copied into the `projectRoot + '/tags'` (remote) folder.
 
-By default is is assumed that you have a single project per repo and the
-`trunk`, `branches`, and `tags` folders for your project live at the top of this
-repo.
+Project roots are determined by checking the following in order:
+
+- The task options for a `'projectRoot'` property
+- Your `package.json` file for `repository.url` (if `respository.type` ===
+  'svn')
+- The url returned by `svn info`
 
 #### dryRun
 Type: `Boolean`
@@ -90,5 +93,6 @@ using [Grunt](http://gruntjs.com/).
 
 ## Release History
 
+- 03-21-2014 v0.5.0 Check package.json for repository url 
 - 03-13-2014 v0.4.0 Make project root configurable.
 - 01-01-2014 v0.3.0 Make tag name and commit message configurable.
