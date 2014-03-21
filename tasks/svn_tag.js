@@ -83,10 +83,13 @@ module.exports = function(grunt) {
 
     if(grunt.option('projectRoot') || options.projectRoot) {
       projectRoot = grunt.option('projectRoot') ? grunt.option('projectRoot') : options.projectRoot;
-    }
-
-    if (packageJson.repository && packageJson.repository.type === 'svn') {
-      projectRoot = getRepositoryRoot(packageJson.repository.url);
+    } else {
+      if (packageJson.repository && packageJson.repository.type === 'svn' && packageJson.repository.url) {
+        projectRoot = getRepositoryRoot(packageJson.repository.url);
+        if(!projectRoot) {
+          grunt.fail.fatal(this.name + ' count not determine a svn project root from packgage.json repo url (missing trunk/branches?).');
+        }
+      }
     }
 
     projectRoot = projectRoot.replace(/\/$/, '');
