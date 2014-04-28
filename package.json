@@ -29,9 +29,9 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.6.0",
     "grunt": "~0.4.0rc7",
-    "grunt-bump": "0.0.13"
+    "grunt-bump": "0.0.13",
+    "grunt-contrib-jshint": "~0.6.0"
   },
   "keywords": [
     "gruntplugin"
@@ -39,6 +39,6 @@
   "dependencies": {
     "shelljs": "~0.2.6",
     "findup-sync": "~0.1.2",
-    "svn-info": "~0.1.2"
+    "svn-project-root": "^0.1.0"
   }
 }

@@ -36,26 +36,9 @@ module.exports = function(grunt) {
     return sh.exec(cmd, {silent: true});
   };
 
-  var getRepositoryRoot = function(url) {
-    var roots = ['trunk', 'branches'];
-    url = url.trim().replace(/\/$/, '');
-
-    var result = null;
-    roots.forEach(function(root) {
-        var i = url.lastIndexOf(root);
-        if (i !== -1) {
-            result = url.substring(0, i);
-            return false;
-        }
-    });
-
-    return result;
-  };
-
   grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
 
-    var info,
-        options = this.options({
+    var options = this.options({
           'commitMessage': 'admin: Tag for release ({%= version %})',
           'tag': 'v{%= version %}',
           'dryRun': false,
@@ -66,36 +49,29 @@ module.exports = function(grunt) {
     options.tag = grunt.option('tag') ? grunt.option('tag') : options.tag;
     options.dryRun = grunt.option('dry-run') ? grunt.option('dry-run') : options.dryRun;
 
-    try {
-      info = require('svn-info').sync();
-    } catch(e) {
-      grunt.fail.fatal(e);
-    }
-
     var packageJsonLoc = findup('package.json', {cwd: process.cwd()});
 
     if(!packageJsonLoc) {
       return grunt.fail.fatal(this.name + ' could not find your package.json file.');
     }
 
-    var packageJson =  grunt.file.readJSON(packageJsonLoc);
-    var projectRoot = info.repositoryRoot;
+    var packageJson = grunt.file.readJSON(packageJsonLoc)
+      , projectRoot;
 
     if(grunt.option('projectRoot') || options.projectRoot) {
       projectRoot = grunt.option('projectRoot') ? grunt.option('projectRoot') : options.projectRoot;
     } else {
-      if (packageJson.repository && packageJson.repository.type === 'svn' && packageJson.repository.url) {
-        projectRoot = getRepositoryRoot(packageJson.repository.url);
-        if(!projectRoot) {
-          grunt.fail.fatal(this.name + ' count not determine a svn project root from packgage.json repo url (missing trunk/branches?).');
-        }
+      try {
+        projectRoot = require('svn-project-root').sync();
+      } catch(e) {
+        grunt.fail.fatal(e);
       }
     }
 
     projectRoot = projectRoot.replace(/\/$/, '');
 
     var projectVersion = packageJson.version
-      , fromURL = info.url
+      , fromURL = projectRoot + '/trunk/'
       , tagName = processTemplate(options.tag, {
             version: projectVersion
         })
