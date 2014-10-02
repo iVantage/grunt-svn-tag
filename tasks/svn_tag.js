@@ -48,6 +48,12 @@ module.exports = function(grunt) {
     options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
     options.tag = grunt.option('tag') ? grunt.option('tag') : options.tag;
     options.dryRun = grunt.option('dry-run') ? grunt.option('dry-run') : options.dryRun;
+    if (grunt.option('username')) {
+      options.username = grunt.option('username');
+    }
+    if (grunt.option('password')) {
+      options.password = grunt.option('password');
+    }
 
     var packageJsonLoc = findup('package.json', {cwd: process.cwd()});
 
@@ -80,6 +86,10 @@ module.exports = function(grunt) {
           version: projectVersion
         })
       , command = 'svn cp "' + fromURL + '" "' + toURL + '" -m "' + commitMessage + '"';
+
+    if (options.username && options.password) {
+      command += ' --username '+options.username+' --password '+options.password;
+    }
 
     if(run(command, options['dryRun']).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
