@@ -88,12 +88,12 @@ written to the console rather than executed.
 #### username
 Type: `String`
 
-If specfied, the svn uses it to authenticate.
+The username svn uses for authentication, a password must also be specified.
 
 #### password
 Type: `String`
 
-If specfied, the svn uses it to authenticate.
+The password svn uses for authentication, a username must also be specified.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style.

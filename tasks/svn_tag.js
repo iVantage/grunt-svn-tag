@@ -42,7 +42,9 @@ module.exports = function(grunt) {
           'commitMessage': 'admin: Tag for release ({%= version %})',
           'tag': 'v{%= version %}',
           'dryRun': false,
-          'projectRoot': null
+          'projectRoot': null,
+          'username': null,
+          'password': null
         });
 
     options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
@@ -87,8 +89,8 @@ module.exports = function(grunt) {
         })
       , command = 'svn cp "' + fromURL + '" "' + toURL + '" -m "' + commitMessage + '"';
 
-    if (options.username && options.password) {
-      command += ' --username '+options.username+' --password '+options.password;
+    if(options.username && options.password) {
+      command += ' --username '+ options.username + ' --password ' + options.password;
     }
 
     if(run(command, options['dryRun']).code > 0) {
