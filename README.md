@@ -85,6 +85,16 @@ Default: `false`
 Mostly included for debugging purposes. When set to true svn commands while be
 written to the console rather than executed.
 
+#### username
+Type: `String`
+
+If specfied, the svn uses it to authenticate.
+
+#### password
+Type: `String`
+
+If specfied, the svn uses it to authenticate.
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style.
 Add unit tests for any new or changed functionality. Lint and test your code
