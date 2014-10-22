@@ -14,7 +14,9 @@ module.exports = function(grunt) {
   // creation: http://gruntjs.com/creating-tasks
 
   var sh = require('shelljs')
-    , findup = require('findup-sync');
+    , findup = require('findup-sync')
+    , svnProjectRoot = require('svn-project-root')
+    , svnInfo = require('svn-info');
 
   grunt.template.addDelimiters('svn_tag', '{%', '%}');
 
@@ -70,7 +72,7 @@ module.exports = function(grunt) {
       projectRoot = grunt.option('projectRoot') ? grunt.option('projectRoot') : options.projectRoot;
     } else {
       try {
-        projectRoot = require('svn-project-root').sync();
+        projectRoot = svnProjectRoot.sync();
       } catch(e) {
         grunt.fail.fatal(e);
       }
@@ -78,8 +80,33 @@ module.exports = function(grunt) {
 
     projectRoot = projectRoot.replace(/\/$/, '');
 
+    // We support tagging either the trunk or a branch. Are we on trunk or a
+    // branch? If a branch figure out which we're on.
+    var fromPath;
+    try {
+      svnInfo.sync().relativeUrl.split('/').every(function(part, ix, arr) {
+        part = part.toLowerCase();
+        if(part === 'trunk') {
+          fromPath = '/trunk/';
+          return false;
+        }
+
+        if(part === 'branches' && arr.length > ix + 1) {
+          fromPath = '/branches/' + arr[ix+1] + '/';
+          return false;
+        }
+        return true;
+      });
+
+      if(!fromPath) {
+        throw new Error('svn_tag task must be run from trunk or a branch');
+      }
+    } catch(e) {
+      grunt.fail.fatal(e);
+    }
+
     var projectVersion = packageJson.version
-      , fromURL = projectRoot + '/trunk/'
+      , fromURL = projectRoot + fromPath
       , tagName = processTemplate(options.tag, {
             version: projectVersion
         })

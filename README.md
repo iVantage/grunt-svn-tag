@@ -102,6 +102,7 @@ using [Grunt](http://gruntjs.com/).
 
 ## Release History
 
+- 03-21-2014 v0.7.0 Support tagging from trunk or a branch
 - 03-21-2014 v0.5.0 Check package.json for repository url 
 - 03-13-2014 v0.4.0 Make project root configurable.
 - 01-01-2014 v0.3.0 Make tag name and commit message configurable.
