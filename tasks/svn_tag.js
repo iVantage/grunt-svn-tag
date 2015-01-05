@@ -82,10 +82,10 @@ module.exports = function(grunt) {
 
     // We support tagging either the trunk or a branch. Are we on trunk or a
     // branch? If a branch figure out which we're on.
-    var fromPath, svnPath ,path;
+    var fromPath;
     try {
-      svnPath = svnInfo.sync();
-      path = svnPath.relativeUrl ? svnPath.relativeUrl : svnPath.url;
+      var _svnInfo = svnInfo.sync()
+        , path = _svnInfo.relativeUrl ? _svnInfo.relativeUrl : _svnInfo.url;
       path.split('/').every(function(part, ix, arr) {
         part = part.toLowerCase();
         if(part === 'trunk') {
