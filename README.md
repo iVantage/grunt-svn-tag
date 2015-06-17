@@ -25,7 +25,7 @@ grunt.loadNpmTasks('grunt-svn-tag');
 ## The "svn_tag" task
 
 ### Overview
-The `svn\_tag` task creates a new subversion tag for your working copy path
+The `svn_tag` task creates a new subversion tag for your working copy path
 using the version listed in your project's `package.json` file.
 
 In your project's Gruntfile, add a section named `svn_tag` to the data object
