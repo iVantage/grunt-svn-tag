@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     return sh.exec(cmd, {silent: true});
   };
 
-  grunt.registerTask('svn_tag', 'Tag this svn repo!', function() {
+  grunt.registerMultiTask('svn_tag', 'Tag this svn repo!', function () {
 
     var options = this.options({
           'commitMessage': 'admin: Tag for release ({%= version %})',
@@ -46,7 +46,8 @@ module.exports = function(grunt) {
           'dryRun': false,
           'projectRoot': null,
           'username': null,
-          'password': null
+          'password': null,
+          'overwrite': false
         });
 
     options.commitMessage = grunt.option('commit-message') ? grunt.option('commit-message') : options.commitMessage;
@@ -122,11 +123,24 @@ module.exports = function(grunt) {
       command += ' --username '+ options.username + ' --password ' + options.password;
     }
 
-    if(run(command, options['dryRun']).code > 0) {
+    if (options.overwrite) {
+      deleteToUrlFirst();
+    }
+
+    if (run(command, options['dryRun']).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
     }
 
-    grunt.log.ok('Tagged as version ' + projectVersion);
+    grunt.log.ok('Tagged as "' + tagName + '"');
+
+    function deleteToUrlFirst() {
+      var command = 'svn delete "' + toURL + '" -m "deleting destination folder"';
+      var result = run(command, options.dryRun);
+      // if the folder doesn't exist, then deleting will fail, but we can ignore that: E160013
+      if (result.code > 0 && result.output.indexOf('E160013') === -1) {
+        grunt.fail.fatal(result.output);
+      }
+    }
   });
 
 };
