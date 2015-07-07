@@ -25,7 +25,7 @@ grunt.loadNpmTasks('grunt-svn-tag');
 ## The "svn_tag" task
 
 ### Overview
-The `svn_tag` task creates a new subversion tag for your working copy path
+The `svn_tag` multi-task creates a new subversion tag for your working copy path
 using the version listed in your project's `package.json` file.
 
 In your project's Gruntfile, add a section named `svn_tag` to the data object
@@ -34,9 +34,11 @@ passed into `grunt.initConfig()`.
 ```javascript
 grunt.initConfig({
   svn_tag: {
-    options: {
-      tag: 'v{%= version %}',
-      commitMessage: 'admin: Tag for release ({%= version %})'
+    release: {
+      options: {
+        tag: 'v{%= version %}',
+        commitMessage: 'admin: Tag for release ({%= version %})'
+      }
     }
   }
 });
@@ -85,6 +87,19 @@ Default: `false`
 Mostly included for debugging purposes. When set to true svn commands while be
 written to the console rather than executed.
 
+#### overwrite
+Type: `Boolean`
+Default: `false`
+
+Overwrite `tag` if it already exists. This will effectively issue a `svn remove`
+on your tag name before attempting to copy onto it.
+
+#### overwriteMessage
+Type: `String`
+Default: `'admin: Cleaning tag destination'`
+
+The commit message to use when delete 
+
 #### username
 Type: `String`
 
@@ -96,12 +111,13 @@ Type: `String`
 The password svn uses for authentication, a username must also be specified.
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style.
-Add unit tests for any new or changed functionality. Lint and test your code
-using [Grunt](http://gruntjs.com/).
+Please see our consolidated [contribution
+guidelines](https://github.com/iVantage/Contribution-Guidelines).
 
 ## Release History
 
+- 07-07-2015 v0.8.0 Convert to multitask, add `overwite` and `overwriteMessage`
+  options
 - 03-21-2014 v0.7.0 Support tagging from trunk or a branch
 - 03-21-2014 v0.5.0 Check package.json for repository url 
 - 03-13-2014 v0.4.0 Make project root configurable.

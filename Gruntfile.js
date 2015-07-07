@@ -22,17 +22,19 @@ module.exports = function(grunt) {
       },
     },
     svn_tag: {
-      options: {
-        'dryRun': true,
-        'commitMessage': 'Tag project-v{%= version %}',
-        'tag': 'project-v{%= version %}'
+      test: {
+        options: {
+          'dryRun': true,
+          'commitMessage': 'Tag project-v{%= version %}',
+          'tag': 'project-v{%= version %}'
+        }
       }
     },
     bump: {
       options: {
         commitMessage: 'chore: Bump for release (v%VERSION%)',
         files: ['package.json'],
-        commitFiles: ['package.json'],
+        commitFiles: ['*'],
         push: false
       }
     }
