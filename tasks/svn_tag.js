@@ -132,12 +132,11 @@ module.exports = function(grunt) {
       if(rmResult.code > 0 && rmResult.output.indexOf('E160013') === -1) {
         grunt.fail.fatal(rmResult.output);
       }
-    }
-    else {
+    } else {
       try {
-        svnInfo.sync( toURL );
-        grunt.fail.fatal( 'Tag already exists' );
-      } catch( e ){
+        svnInfo.sync(toURL);
+        grunt.fail.fatal('Tag already exists');
+      } catch(e) {
         // Do nothing with the error : it means the tag does not exists
       }
     }
