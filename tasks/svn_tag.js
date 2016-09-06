@@ -133,6 +133,14 @@ module.exports = function(grunt) {
         grunt.fail.fatal(rmResult.output);
       }
     }
+    else {
+      try {
+        svnInfo.sync( toURL );
+        grunt.fail.fatal( 'Tag already exists' );
+      } catch( e ){
+        // Do nothing with the error : it means the tag does not exists
+      }
+    }
 
     if(run(command, options['dryRun']).code > 0) {
       return grunt.fail.fatal('Encountered an error while trying to svn tag repo');
